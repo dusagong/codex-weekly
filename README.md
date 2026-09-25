@@ -6,13 +6,13 @@ Weekly Codex usage, at a glance.
 ![Architecture](https://img.shields.io/badge/Apple_Silicon_%26_Intel-Universal-blue)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-Codex Weekly is a native macOS menu bar application that displays your remaining weekly Codex usage allowance. Check your balance, reset time, and update status, and compare your remaining allowance with the time left before reset.
+Codex Weekly is a native macOS menu bar application that displays your remaining weekly Codex usage allowance and time until reset together. Compare both percentages at a glance without opening the menu, then open the details for reset time and update status.
 
 **[Download](https://github.com/dusagong/codex-weekly/releases/latest)** · [한국어](README.ko.md) · [Report an issue](https://github.com/dusagong/codex-weekly/issues)
 
 ## Features
 
-- **Compact indicator** — an icon and the remaining percentage in the menu bar.
+- **Always-visible comparison** — a chart icon and both remaining percentages in the menu bar, such as `65% · ⏳17%`.
 - **Automatic refresh** — updates every minute and when your Mac wakes from sleep.
 - **Usage details** — used and remaining allowance, reset time, and the last successful update.
 - **Weekly time comparison** — compare remaining allowance and time in the menu and details window, with two bars in the details window and a difference from an even usage pace.
@@ -54,7 +54,7 @@ shasum -a 256 -c SHA256SUMS
 
 ## Usage
 
-The menu bar percentage represents **remaining weekly allowance**, not an exact token count. Select the indicator to view details or use these controls:
+The menu bar always shows both percentages beside the chart icon: **`65% · ⏳17%` means 65% of your weekly allowance and 17% of your weekly time remain**. The first value is the remaining allowance percentage, not an exact token count; the value after the hourglass is the time remaining until your account’s next reset. You can compare them without clicking. Select the indicator to view details or use these controls:
 
 | Menu item | Action |
 | --- | --- |
@@ -63,7 +63,7 @@ The menu bar percentage represents **remaining weekly allowance**, not an exact 
 | Codex 열기 | Open the installed Codex desktop application |
 | 종료 | Quit Codex Weekly |
 
-Reset times use your Mac’s local time zone. A `?` beside a percentage means it is the last known value following a failed update or a stale reading. After the reported reset time passes, the old percentage is hidden until a new fetch succeeds. An unavailable reading is not treated as zero remaining allowance.
+Reset times use your Mac’s local time zone. A `?` beside the allowance percentage means it is the last known value following a failed update or a stale reading. If the reset time is unknown, the time indicator shows a dash. After the reported reset time passes, the old allowance is replaced by a dash, or an ellipsis while refreshing, and the time indicator shows `0%` until a new fetch succeeds. An unavailable reading is not treated as zero remaining allowance.
 
 ### Compare allowance and time
 

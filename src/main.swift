@@ -68,6 +68,7 @@ final class WeeklyApp: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWindow
         image?.isTemplate = true
         statusItem.button?.image = image
         statusItem.button?.imagePosition = .imageLeading
+        statusItem.button?.font = .monospacedDigitSystemFont(ofSize: 12, weight: .regular)
         menu.autoenablesItems = false
         menu.delegate = self
         for item in [titleItem, usedItem, timeItem, paceItem, resetItem, updatedItem, errorItem] {
@@ -161,14 +162,15 @@ final class WeeklyApp: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWindow
         let expired = usage?.isExpired(at: now) ?? false
         let stale = lastError != nil || (usage.map { now.timeIntervalSince($0.fetchedAt) > 150 } ?? false)
         let comparison = UsageComparison(usage: usage, at: now, isStale: stale)
+        let timeTitle = comparison.timeRemainingPercent.map { "\(Int($0.rounded(.down)))%" } ?? "—"
         if let usage, !expired {
-            statusItem.button?.title = "\(usage.remainingText)\(stale ? " · ?" : "")"
+            statusItem.button?.title = "\(usage.remainingText)\(stale ? "?" : "") · ⏳\(timeTitle)"
             titleItem.title = "주간 잔여 \(usage.remainingText)\(stale ? " (마지막 확인값)" : "")"
             usedItem.title = "사용 \(usage.usedText) · 남음 \(usage.remainingText)"
             bigLabel.stringValue = "사용 한도 \(UsageComparison.percentText(usage.remainingPercent)) 남음"
             progress.doubleValue = usage.remainingPercent
         } else {
-            statusItem.button?.title = fetching ? "…" : "—"
+            statusItem.button?.title = "\(fetching ? "…" : "—") · ⏳\(timeTitle)"
             titleItem.title = expired ? "초기화 후 사용량 확인 필요" : "주간 사용량 확인 필요"
             usedItem.title = "사용량을 확인하면 잔량이 표시됩니다"
             bigLabel.stringValue = fetching ? "확인 중…" : "확인 필요"
