@@ -6,7 +6,7 @@ Weekly Codex usage, at a glance.
 ![Architecture](https://img.shields.io/badge/Apple_Silicon_%26_Intel-Universal-blue)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-Codex Weekly is a native macOS menu bar application that displays your remaining weekly Codex usage allowance. Check your balance, reset time, and update status without leaving your current workspace.
+Codex Weekly is a native macOS menu bar application that displays your remaining weekly Codex usage allowance. Check your balance, reset time, and update status, and compare your remaining allowance with the time left before reset.
 
 **[Download](https://github.com/dusagong/codex-weekly/releases/latest)** · [한국어](README.ko.md) · [Report an issue](https://github.com/dusagong/codex-weekly/issues)
 
@@ -15,6 +15,7 @@ Codex Weekly is a native macOS menu bar application that displays your remaining
 - **Compact indicator** — an icon and the remaining percentage in the menu bar.
 - **Automatic refresh** — updates every minute and when your Mac wakes from sleep.
 - **Usage details** — used and remaining allowance, reset time, and the last successful update.
+- **Weekly time comparison** — compare remaining allowance and time in the menu and details window, with two bars in the details window and a difference from an even usage pace.
 - **Existing Codex login** — retrieves usage through your installed Codex application or CLI.
 - **Native implementation** — built with Swift and AppKit, with no third-party Swift dependencies.
 
@@ -63,6 +64,14 @@ The menu bar percentage represents **remaining weekly allowance**, not an exact 
 | 종료 | Quit Codex Weekly |
 
 Reset times use your Mac’s local time zone. A `?` beside a percentage means it is the last known value following a failed update or a stale reading. After the reported reset time passes, the old percentage is hidden until a new fetch succeeds. An unavailable reading is not treated as zero remaining allowance.
+
+### Compare allowance and time
+
+The menu shows the remaining weekly time as a percentage and duration, alongside the difference between remaining allowance and remaining time. The details window shows two bars so you can compare the two percentages. Time is measured against your account’s next weekly reset, not a calendar week.
+
+The remaining time percentage is `seconds until reset / 604,800 × 100`, limited to the range 0–100%. The comparison subtracts **remaining time %** from **remaining allowance %** and displays the difference in percentage points (`%p`). A positive difference means more allowance remains than an even usage pace would leave; a negative difference means allowance has been used faster than that pace. For example, **70% allowance remaining and 40% time remaining means +30%p of headroom** against the even pace. This is a comparison with even usage across the week, not a prediction or guarantee about future usage.
+
+The comparison is unavailable if the reset time is missing or has passed. If an update fails or the usage reading is stale, the pace assessment is paused until fresh usage data is available.
 
 ## Usage data
 

@@ -1,6 +1,14 @@
 import Foundation
 
+struct WeeklyPace: Equatable {
+    let timeRemainingPercent: Double
+    let differencePercentagePoints: Double
+    let secondsRemaining: TimeInterval
+}
+
 struct WeeklyUsage: Equatable {
+    static let windowDuration: TimeInterval = 7 * 24 * 60 * 60
+
     let usedPercent: Double
     let resetsAt: Date?
     let fetchedAt: Date
@@ -11,6 +19,24 @@ struct WeeklyUsage: Equatable {
 
     func isExpired(at now: Date = Date()) -> Bool {
         resetsAt.map { $0 <= now } ?? false
+    }
+
+    func timeRemainingPercent(at now: Date = Date()) -> Double? {
+        guard let resetsAt else { return nil }
+        let secondsRemaining = resetsAt.timeIntervalSince(now)
+        guard secondsRemaining.isFinite else { return nil }
+        return max(0, min(100, secondsRemaining / Self.windowDuration * 100))
+    }
+
+    func pace(at now: Date = Date()) -> WeeklyPace? {
+        guard let resetsAt, let timePercent = timeRemainingPercent(at: now) else { return nil }
+        let secondsRemaining = resetsAt.timeIntervalSince(now)
+        guard secondsRemaining > 0 else { return nil }
+        return WeeklyPace(
+            timeRemainingPercent: timePercent,
+            differencePercentagePoints: remainingPercent - timePercent,
+            secondsRemaining: secondsRemaining
+        )
     }
 }
 

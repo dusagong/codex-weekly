@@ -15,6 +15,11 @@ mkdir -p "$test_dir/module-cache"
     "$repo_dir/tests/model/main.swift" -o "$test_dir/weekly-model"
 "$test_dir/weekly-model"
 
+/usr/bin/xcrun swiftc -module-cache-path "$test_dir/module-cache" \
+    "$repo_dir/src/UsageModel.swift" "$repo_dir/src/UsageComparison.swift" \
+    "$repo_dir/tests/comparison/main.swift" -o "$test_dir/weekly-comparison"
+"$test_dir/weekly-comparison"
+
 # The fixture's main-actor checks use Swift 6 top-level isolation.
 /usr/bin/xcrun swiftc -swift-version 6 -module-cache-path "$test_dir/module-cache" \
     "$repo_dir/src/UsageRPC.swift" \
